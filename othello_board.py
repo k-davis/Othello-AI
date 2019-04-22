@@ -21,7 +21,8 @@ class OthelloBoard:
     def draw_board(self):
         # print board column headers
         print(' ', end='')
-        col_hdrs = [print(chr(e) + ' ', end='') for e in range(ord('A'), ord('I'))]
+        col_hdrs = [print(chr(e) + ' ', end='')
+                    for e in range(ord('A'), ord('I'))]
         print()
 
         for r_idx, row in enumerate(self.board):
@@ -62,5 +63,34 @@ class OthelloBoard:
         legal_move = False
         if self.board[move_row][move_column] is None:
             # if there is nothing in that spot, then the move may be legal
+            # go in all eight dirrections
+            #   keep going in that direction so long as token but not your token
+            #       if your token, valid move
+            found_same_color = False
+            xposition = move_column
+            yposition = move_row
+            current_color = self.board[yposition][xposition]
+            for column in range(-1, 2):
+                if legal_move is True:
+                    break
+                for row in range(-1, 2):
+                    xposition += column
+                    yposition += row
+                    current_color = self.board[yposition][xposition]
+                    # if current_color is empty, the player_color or out of bounds, then check in a different direction
+                    if (current_color is player_color) or (current_color is None) or (current_color is -1):
+                        # don't want to break out of the loop, else directions may be skipped
+                        continue
+                    while found_same_color is False:
+                        # continue checking in that direction
+                        xposition += column
+                        yposition += row
+                        current_color = self.board[yposition][xposition]
+                        if current_color is player_color:
+                            found_same_color = True
+                            legal_move = True
+                            break
+                        if current_color is -1:
+                            break
 
         return legal_move
