@@ -19,9 +19,15 @@ class OthelloBoard:
                        for i in range(0, 8)] for i in range(0, 8)]
 
     def draw_board(self):
-        for row in self.board:
-            for token in row:
+        # print board column headers
+        print(' ', end='')
+        col_hdrs = [print(chr(e) + ' ', end='') for e in range(ord('A'), ord('I'))]
+        print()
 
+        for r_idx, row in enumerate(self.board):
+            print(r_idx + 1, end='')
+
+            for token in row:
                 if token == None:
                     self.draw_blank()
                 elif token == W:
