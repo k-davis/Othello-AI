@@ -1,0 +1,115 @@
+Project 12
+An Othello Interface
+
+This assignment asks you to produce an interface for a program that will play Othello.  
+Produce an interface for Othello that conforms to the following rules, specifications, 
+and conventions.  See Scanned Notes/Readings/Videos for a link to an online Othello Game
+
+Infrastructure and Submission Rules
+1. You may write your interface so that it runs under Windows, Linux, Mac Os. I will try 
+    to reserve HK 230 for the day of the exam.  
+2. The interface may be text-based or graphical
+3. The interface may be coded in C++, java, or python.
+4. Use everything you have learned about object-oriented programming in this assignment.  
+ 	At the very least, there should be an Othello class with a board member variable that
+	is an 8 X 8 matrix. 
+5. Bost members of the team must show me or the TA the interface and code.  Allow 15 
+	minutes.  Both team members must be present.  Your entire grade will be based upon 
+	whether your interface meets the specifications.  Pay close attention.  There are 
+	many details and no partial credit.  Any deviance from the specs means a return trip 
+	to my office with all team members.  The clever teams will make appointments to show 
+	their work.
+
+Specifications for Interaction
+Though the game will have no AI yet, we’ll expect to be able to go through the sequence 
+	of moves described below.
+P = Player
+AI = AI Player
+S = System that keeps track of things
+See "Conventions," below for details on the look of the board and other important items.
+Play takes place on two computers. Suppose Team 1's AI makes a move. Team 2 enters that 
+	move on its computer. Now Team 2's AI makes a move. Team 1 enters that move on its 
+	computer. Continue the process until play concludes.
+Specifically:
+S displays the initial board configuration. Scoreboard indicates that both black and 
+	white have a score of 2.
+
+S asks P if he/she wants to be black or white (the teams have previously determined 
+	between themselves who will go first, i.e., who will be black)
+
+S reads P's answer. If P chooses black, go to step 12.
+
+If P chooses white, AI announces that it is about to make a move and asks P for approval.
+
+S reads P's answer.
+
+S displays the position where A has placed a token in row/column format. This can be 
+	done in any way you choose, as long as it's clear.
+
+If AI can't make a move, AI announces that fact.
+
+The board configuration now includes the new token (if one has been played). The square 
+	where the move occurred along with all squares affected by the move are highlighted.
+
+S asks for confirmation.
+
+S reads P ’s answer.
+
+After P has confirmed, S changes the board configuration and the scoreboard to reflect 
+	the results of the new move.
+
+S asks P to make a move.
+
+S reads P’s answer.
+
+The board configuration now includes the new token. The square where the move occurred 
+	along with all squares affected by the move are highlighted.
+
+S asks for confirmation.
+
+After AI has confirmed (actually, the user must confirm for A), S changes the board 
+	configuration and the scoreboard to reflect the results of the new move.
+
+Continue this process until P quits by pressing a designated key or until there are no 
+	more moves.
+
+Conventions and Additional Rules
+The board is an 8 x 8 matrix with an initial configuration like this:
+ WB
+ BW
+
+
+Your game allows the initial configuration to be changed to:
+ BW
+ WB
+
+Columns are labeled ‘A’ to ‘H’ from left to right. Rows are labeled ‘1’ to ‘8’ from top 
+	to bottom. The system must display move coordinates.
+
+Designate squares like this
+
+ Black occupies a square: B or place a black shape on the square
+White occupies a square: W or place a white shape on the square
+
+There is a score board that displays the number of black and the number of white tokens 
+	on the board.
+
+Black goes first. Players choose who is black.
+
+Your system may not decline to move if one is available
+
+Each system must display a timer that ticks off seconds starting from 10 when a move 
+	is initiated. A system whose AI fails to move within 10 seconds forfeits the game.
+
+Your system must always save the prior board state and designate a mechanism by which it 
+	can be returned to in the event of a dispute
+
+Play ends when neither player can make a move. The player with the most discs wins.
+
+Roles and Play for Othello: CPSC 427
+
+
+ 
+
+ 
+
