@@ -31,13 +31,13 @@ class OthelloBoard:
             print()
 
     def draw_w(self):
-        cp.cprint(cp.BK_RED, cp.F_WHITE, W + ' ')
+        cp.cprint(cp.BK_DK_RED, cp.F_WHITE, W + ' ')
 
     def draw_b(self):
-        cp.cprint(cp.BK_RED, cp.F_BLACK, B + ' ')
+        cp.cprint(cp.BK_DK_RED, cp.F_BLACK, B + ' ')
 
     def draw_blank(self):
-        cp.cprint(cp.BK_RED, cp.F_BLACK, '  ')
+        cp.cprint(cp.BK_DK_RED, cp.F_BLACK, '  ')
 
     def set_init_board(self, board_type):
         # if board_type 1, then WB, else BW

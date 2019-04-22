@@ -18,6 +18,7 @@ BK_CYAN = '\u001b[46m'
 BK_WHITE = '\u001b[47m'
 
 BK_DK_GREEN = '\u001b[48;5;22m'
+BK_DK_RED = '\u001b[48;5;88m'
 
 
 RESET = '\u001b[0m'
