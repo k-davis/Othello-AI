@@ -17,6 +17,8 @@ BK_MAGENTA = '\u001b[45m'
 BK_CYAN = '\u001b[46m'
 BK_WHITE = '\u001b[47m'
 
+BK_DK_GREEN = '\u001b[48;5;22m'
+
 
 RESET = '\u001b[0m'
 
@@ -24,10 +26,10 @@ RESET = '\u001b[0m'
 
 
 def cprint(color, text):
-	print(color + text + RESET)
+	print(color + text + RESET, end='')
 
 def cprint(background_color, text_color, text):
-	print(background_color + text_color + text + RESET)
+	print(background_color + text_color + text + RESET, end='')
 
 
 	

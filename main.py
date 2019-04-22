@@ -15,7 +15,6 @@ import othello_board
 
 def main():
     new_board = othello_board.OthelloBoard()
-    print(new_board.board)
 
 
 if __name__ == "__main__":
