@@ -42,3 +42,16 @@ class OthelloBoard:
         cp.cprint(cp.BK_DK_GREEN, cp.F_BLACK, '  ')
 
 
+
+    def set_init_board(self, board_type):
+        # if board_type 1, then WB, else BW
+        if board_type is 1:
+            self.board[3][3] = W
+            self.board[3][4] = B
+            self.board[4][3] = B
+            self.board[4][4] = W
+        else:
+            self.board[3][3] = B
+            self.board[3][4] = W
+            self.board[4][3] = W
+            self.board[4][4] = B
