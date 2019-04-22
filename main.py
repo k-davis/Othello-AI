@@ -16,6 +16,7 @@ import ColorPrinter as cp
 
 def main():
     new_board = othello_board.OthelloBoard()
+    new_board.draw_board()
 
 
 if __name__ == "__main__":
