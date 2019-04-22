@@ -51,3 +51,10 @@ class OthelloBoard:
             self.board[3][4] = W
             self.board[4][3] = W
             self.board[4][4] = B
+
+    def check_valid_move(self, move_row, move_column, player_color):
+        legal_move = False
+        if self.board[move_row][move_column] is None:
+            # if there is nothing in that spot, then the move may be legal
+
+        return legal_move
