@@ -11,6 +11,7 @@ Usage 1:  python3 <program name>
           python3 main.py
 '''
 import othello_board
+import ColorPrinter as cp
 
 
 def main():
