@@ -37,6 +37,18 @@ class OthelloBoard:
                     self.draw_b()
             print()
 
+    def get_points(self):
+        points_w = 0
+        points_b = 0
+        for row in self.board:
+            for elem in row:
+                if elem == W:
+                    points_w += 1
+                elif elem == B:
+                    points_b += 1
+        return points_b, points_w
+
+
     def make_a_move(self, token, row, col):
         row = row - 1
         col = ord(col) - ord('A')
