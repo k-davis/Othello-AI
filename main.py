@@ -42,6 +42,8 @@ def get_move():
 
     return (move[0], move[2])
 
+def format_move(pair):
+    return (int(pair[0]), pair[1])
 
 if __name__ == "__main__":
     main()

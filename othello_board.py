@@ -11,6 +11,7 @@ class OthelloBoard:
 
     def __init__(self):
         self.board = [[None for i in range(0, 8)] for i in range(0, 8)]
+        self.recent_board = [[None for i in range(0, 8)] for i in range(0, 8)]
         self.set_init_board(1)
 
     def rand_board(self):
@@ -18,24 +19,27 @@ class OthelloBoard:
         self.board = [[tkns[random.randint(0, 2)]
                        for i in range(0, 8)] for i in range(0, 8)]
 
-    def draw_board(self):
+    def _draw_board(self, board):
         # print board column headers
         print(' ', end='')
         col_hdrs = [print(chr(e) + ' ', end='')
                     for e in range(ord('A'), ord('I'))]
         print()
 
-        for r_idx, row in enumerate(self.board):
+        for r_idx, row in enumerate(board):
             print(r_idx + 1, end='')
 
             for token in row:
                 if token == None:
-                    self.draw_blank()
+                    self._draw_blank()
                 elif token == W:
-                    self.draw_w()
+                    self._draw_w()
                 elif token == B:
-                    self.draw_b()
+                    self._draw_b()
             print()
+
+    def draw(self):
+        self._draw_board(self.board)
 
     def get_points(self):
         points_w = 0
@@ -49,7 +53,9 @@ class OthelloBoard:
         return points_b, points_w
 
 
-    def make_a_move(self, token, row, col):
+    def make_move(self, token, row, col):
+        self.save_board()
+
         row = row - 1
         col = ord(col) - ord('A')
         self.board[row][col] = token
@@ -73,7 +79,6 @@ class OthelloBoard:
         # up left
         self._make_move_traverse(token, other_token, row-1, col-1, -1, -1)
 
-        self.draw_board()
         
 
     def _make_move_traverse(self, my_tkn, other_tkn, cur_r, cur_c, move_r, move_c):
@@ -91,14 +96,20 @@ class OthelloBoard:
 
         return False
 
+    def save_board(self):
+        for idx, row in enumerate(self.board):
+            self.recent_board[idx] = row.copy()
+            
+    def draw_previous_board(self):
+        self._draw_board(self.recent_board)
 
-    def draw_w(self):
+    def _draw_w(self):
         cp.cprint(cp.BK_DK_RED, cp.F_WHITE, W + ' ')
 
-    def draw_b(self):
+    def _draw_b(self):
         cp.cprint(cp.BK_DK_RED, cp.F_BLACK, B + ' ')
 
-    def draw_blank(self):
+    def _draw_blank(self):
         cp.cprint(cp.BK_DK_RED, cp.F_BLACK, '  ')
 
     def set_init_board(self, board_type):
