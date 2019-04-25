@@ -45,7 +45,6 @@ class OthelloBoard:
     def _reset_highlights(self):
         self.highlights = [[False for i in range(0, 8)] for i in range(0, 8)]
 
-
     def get_points(self):
         points_w = 0
         points_b = 0
@@ -60,7 +59,6 @@ class OthelloBoard:
     def make_move(self, token, row, col):
         self.save_board()
         self._reset_highlights()
-        
 
         row = row - 1
         col = ord(col) - ord('A')
@@ -115,7 +113,7 @@ class OthelloBoard:
     def _draw_w(self, should_highlight):
         if should_highlight:
             cp.cprint(cp.BK_RED, cp.F_WHITE, W + ' ')
-        else: 
+        else:
             cp.cprint(cp.BK_DK_RED, cp.F_WHITE, W + ' ')
 
     def _draw_b(self, should_highlight):
@@ -141,8 +139,10 @@ class OthelloBoard:
             self.board[4][4] = B
 
     def check_valid_move(self, move_row, move_column, player_color):
-        move_row -= 1
-        move_column = ord(move_column) - ord('A')
+
+        if type(move_column) is str:
+            move_column = ord(move_column) - ord('A')
+            move_row -= 1
 
         legal_move = False
         if self.board[move_row][move_column] is None:
@@ -160,13 +160,17 @@ class OthelloBoard:
                 for row in range(-1, 2):
                     xposition = move_column + column
                     yposition = move_row + row
-                    current_color = self.board[yposition][xposition]
+                    if xposition < (len(self.board) - 1) and yposition < (len(self.board) - 1):
+                        current_color = self.board[yposition][xposition]
+                    else:
+                        continue
                     # if current_color is empty, the player_color or out of bounds, then check in a different direction
-                    if (current_color is player_color) or (current_color is None) or (current_color is -1):
+                    if (current_color is player_color) or (current_color is None):
                         # don't want to break out of the loop, else directions may be skipped
                         continue
-                    while found_same_color is False:
+                    while found_same_color is False and xposition < (len(self.board) - 1) and yposition < (len(self.board) - 1):
                         # continue checking in that direction
+
                         xposition += column
                         yposition += row
                         current_color = self.board[yposition][xposition]
@@ -178,3 +182,16 @@ class OthelloBoard:
                             break
 
         return legal_move
+
+    def has_move(self, token):
+        row_index = 0
+        for row in self.board:
+            column_index = 0
+            for column in row:
+                move_row = row_index
+                move_column = column_index
+                if self.check_valid_move(move_row, move_column, token):
+                    return True
+                column_index += 1
+            row_index += 1
+        return False

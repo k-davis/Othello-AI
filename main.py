@@ -16,6 +16,7 @@ import ColorPrinter as cp
 B = 'B'
 W = 'W'
 
+
 class OthelloProg:
     def __init__(self):
         self.board = othello_board.OthelloBoard()
@@ -23,19 +24,10 @@ class OthelloProg:
         self.board.draw()
         self.display_score()
         self.my_token = self.get_my_color()
-        
-        self.next_player = B
-        
-        
-        '''
-        won = False
-        while(won is False):
-            row, column = self.get_move()
-            print(str(row) + ', ' + str(column))
-            if self.board.check_valid_move(row, column, self.my_token):
-                print("valid")
-        '''
 
+        self.next_player = B
+        if self.board.has_move(self.next_player):
+            print("has move")
 
     def get_move(self):
         move = input("Choose position (R C): ")
@@ -85,4 +77,3 @@ class OthelloProg:
 
 if __name__ == "__main__":
     OthelloProg()
-    
