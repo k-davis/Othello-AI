@@ -16,6 +16,7 @@ import ColorPrinter as cp
 B = 'B'
 W = 'W'
 
+
 class OthelloProg:
     def __init__(self):
         self.board = othello_board.OthelloBoard()
@@ -26,6 +27,7 @@ class OthelloProg:
         print()
 
         self.my_token = self.get_my_color()
+
         print()
 
         self.ai_token = B if self.my_token == W else W
@@ -63,6 +65,9 @@ class OthelloProg:
         self.board.draw()
 
         self.display_score()
+
+    def do_human_turn(self):
+        
 
 
     def get_move(self):
@@ -110,4 +115,3 @@ class OthelloProg:
 
 if __name__ == "__main__":
     OthelloProg()
-    
