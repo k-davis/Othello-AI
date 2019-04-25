@@ -20,11 +20,19 @@ class OthelloProg:
     def __init__(self):
         self.board = othello_board.OthelloBoard()
 
+        print()
         self.board.draw()
         self.display_score()
+        print()
+
         self.my_token = self.get_my_color()
+        print()
+
+        self.ai_token = B if self.my_token == W else W
         
         self.next_player = B
+
+        self.do_ai_turn()
         
         
         '''
@@ -36,13 +44,30 @@ class OthelloProg:
                 print("valid")
         '''
 
+    def do_ai_turn(self):
+        input('Ready to make a move... (enter to continue)')
+
+        print()
+        print('Here is my move (x, x)')
+
+        print('** For demonstration purposes choose for the AI **')
+        move = self.get_move()
+
+        while not self.board.check_valid_move(move[0], move[1], self.ai_token):
+            print('That is an invalid move. Try again.')
+            move = self.get_move()
+        print()
+        
+        self.board.make_move(self.ai_token, move[0], move[1])
+
+        self.board.draw()
+
+        self.display_score()
+
 
     def get_move(self):
         move = input("Choose position (R C): ")
         is_length_three = is_col_valid = is_row_valid = False
-
-        if move == 'REVERT':
-            self.revert()
 
         is_length_three = len(move) == 3
 
