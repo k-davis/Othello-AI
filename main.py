@@ -13,16 +13,36 @@ Usage 1:  python3 <program name>
 import othello_board
 import ColorPrinter as cp
 
+B = 'B'
+W = 'W'
 
-class OthelloAI:
+class OthelloProg:
     def __init__(self):
         self.board = othello_board.OthelloBoard()
-        self.my_token = self.get_my_color()
+
         self.board.draw()
+        self.display_score()
+        self.my_token = self.get_my_color()
+        
+        self.next_player = B
+        
+        
+        '''
+        won = False
+        while(won is False):
+            row, column = self.get_move()
+            print(str(row) + ', ' + str(column))
+            if self.board.check_valid_move(row, column, self.my_token):
+                print("valid")
+        '''
+
 
     def get_move(self):
         move = input("Choose position (R C): ")
         is_length_three = is_col_valid = is_row_valid = False
+
+        if move == 'REVERT':
+            self.revert()
 
         is_length_three = len(move) == 3
 
@@ -42,29 +62,27 @@ class OthelloAI:
 
         return (int(move[0]), move[2])
 
+    def revert(self):
+        self.board.revert()
+
     def get_my_color(self):
         color = input('Will you play as black (B) or white (W)? ')
 
-        while color not in ['B', 'W']:
+        while color not in [B, W]:
             print('Selection must be either \'B\' or \'W\'')
             color = input('Will you play as black (B) or white (W)? ')
+
+        print('You have chosen: ' + color + '.')
 
         return color
 
     def display_score(self):
-        score = self.new_board.get_points()
+        score = self.board.get_points()
         print('  -- Score --')
         print(' Black: ' + str(score[0]))
         print(' White: ' + str(score[1]))
 
 
 if __name__ == "__main__":
-    AI = OthelloAI()
-    won = False
-    while(won is False):
-        row, column = OthelloAI.get_move()
-        row = int(row)
-        column = ord(column) - 65
-        print(column)
-        if AI.board.check_valid_move(row, column, AI.my_token):
-            print("valid")
+    OthelloProg()
+    

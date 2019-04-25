@@ -108,6 +108,10 @@ class OthelloBoard:
     def draw_previous_board(self):
         self._draw_board(self.recent_board)
 
+    def revert(self):
+        self.board = self.recent_board
+        self._reset_highlights()
+
     def _draw_w(self, should_highlight):
         if should_highlight:
             cp.cprint(cp.BK_RED, cp.F_WHITE, W + ' ')
@@ -137,6 +141,9 @@ class OthelloBoard:
             self.board[4][4] = B
 
     def check_valid_move(self, move_row, move_column, player_color):
+        move_row -= 1
+        move_column = ord(move_column) - ord('A')
+
         legal_move = False
         if self.board[move_row][move_column] is None:
             # if there is nothing in that spot, then the move may be legal
