@@ -57,7 +57,6 @@ class OthelloBoard:
                     points_b += 1
         return points_b, points_w
 
-
     def make_move(self, token, row, col):
         self.save_board()
         self._reset_highlights()
@@ -86,15 +85,13 @@ class OthelloBoard:
         # up left
         self._make_move_traverse(token, other_token, row-1, col-1, -1, -1)
 
-        
-
     def _make_move_traverse(self, my_tkn, other_tkn, cur_r, cur_c, move_r, move_c):
         if self.board[cur_r][cur_c] == None:
             return False
 
         if self.board[cur_r][cur_c] == my_tkn:
             return True
-        
+
         # if valid move
         if self._make_move_traverse(my_tkn, other_tkn, cur_r + move_r, cur_c + move_c, move_r, move_c):
             # flip tokens while backtracking
@@ -154,8 +151,8 @@ class OthelloBoard:
                 if legal_move is True:
                     break
                 for row in range(-1, 2):
-                    xposition += column
-                    yposition += row
+                    xposition = move_column + column
+                    yposition = move_row + row
                     current_color = self.board[yposition][xposition]
                     # if current_color is empty, the player_color or out of bounds, then check in a different direction
                     if (current_color is player_color) or (current_color is None) or (current_color is -1):
