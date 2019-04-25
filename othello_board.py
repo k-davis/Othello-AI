@@ -168,11 +168,12 @@ class OthelloBoard:
                     if (current_color is player_color) or (current_color is None):
                         # don't want to break out of the loop, else directions may be skipped
                         continue
-                    while found_same_color is False and xposition < (len(self.board) - 1) and yposition < (len(self.board) - 1):
+                    while found_same_color is False and xposition < (len(self.board) - 1) and xposition >= 0 and yposition < (len(self.board) - 1) and yposition >= 0:
                         # continue checking in that direction
-
                         xposition += column
                         yposition += row
+                        print("xposition: ", xposition)
+                        print("yposition: ", yposition)
                         current_color = self.board[yposition][xposition]
                         if current_color is player_color:
                             found_same_color = True
