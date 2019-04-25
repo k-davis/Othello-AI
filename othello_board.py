@@ -12,6 +12,7 @@ class OthelloBoard:
     def __init__(self):
         self.board = [[None for i in range(0, 8)] for i in range(0, 8)]
         self.recent_board = [[None for i in range(0, 8)] for i in range(0, 8)]
+        self._reset_highlights()
         self.set_init_board(1)
 
     def rand_board(self):
@@ -19,7 +20,7 @@ class OthelloBoard:
         self.board = [[tkns[random.randint(0, 2)]
                        for i in range(0, 8)] for i in range(0, 8)]
 
-    def _draw_board(self, board):
+    def _draw_board(self, board, should_highlight=False):
         # print board column headers
         print(' ', end='')
         col_hdrs = [print(chr(e) + ' ', end='')
@@ -29,17 +30,21 @@ class OthelloBoard:
         for r_idx, row in enumerate(board):
             print(r_idx + 1, end='')
 
-            for token in row:
+            for c_idx, token in enumerate(row):
                 if token == None:
                     self._draw_blank()
                 elif token == W:
-                    self._draw_w()
+                    self._draw_w(self.highlights[r_idx][c_idx])
                 elif token == B:
-                    self._draw_b()
+                    self._draw_b(self.highlights[r_idx][c_idx])
             print()
 
     def draw(self):
-        self._draw_board(self.board)
+        self._draw_board(self.board, should_highlight=True)
+
+    def _reset_highlights(self):
+        self.highlights = [[False for i in range(0, 8)] for i in range(0, 8)]
+
 
     def get_points(self):
         points_w = 0
@@ -55,11 +60,13 @@ class OthelloBoard:
 
     def make_move(self, token, row, col):
         self.save_board()
+        self._reset_highlights()
+        
 
         row = row - 1
         col = ord(col) - ord('A')
         self.board[row][col] = token
-
+        self.highlights[row][col] = True
         other_token = B if token == W else W
 
         # up
@@ -92,6 +99,7 @@ class OthelloBoard:
         if self._make_move_traverse(my_tkn, other_tkn, cur_r + move_r, cur_c + move_c, move_r, move_c):
             # flip tokens while backtracking
             self.board[cur_r][cur_c] = my_tkn
+            self.highlights[cur_r][cur_c] = True
             return True
 
         return False
@@ -99,15 +107,21 @@ class OthelloBoard:
     def save_board(self):
         for idx, row in enumerate(self.board):
             self.recent_board[idx] = row.copy()
-            
+
     def draw_previous_board(self):
         self._draw_board(self.recent_board)
 
-    def _draw_w(self):
-        cp.cprint(cp.BK_DK_RED, cp.F_WHITE, W + ' ')
+    def _draw_w(self, should_highlight):
+        if should_highlight:
+            cp.cprint(cp.BK_RED, cp.F_WHITE, W + ' ')
+        else: 
+            cp.cprint(cp.BK_DK_RED, cp.F_WHITE, W + ' ')
 
-    def _draw_b(self):
-        cp.cprint(cp.BK_DK_RED, cp.F_BLACK, B + ' ')
+    def _draw_b(self, should_highlight):
+        if should_highlight:
+            cp.cprint(cp.BK_RED, cp.F_BLACK, B + ' ')
+        else:
+            cp.cprint(cp.BK_DK_RED, cp.F_BLACK, B + ' ')
 
     def _draw_blank(self):
         cp.cprint(cp.BK_DK_RED, cp.F_BLACK, '  ')

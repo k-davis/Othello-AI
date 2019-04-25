@@ -17,9 +17,10 @@ class OthelloAI:
     def __init__(self):
         self.board = othello_board.OthelloBoard()
         self.my_token = self.get_my_color()
+       
         
 
-    def get_move():
+    def get_move(self):
         move = input("Choose position (R C): ")
         is_length_three = is_col_valid = is_row_valid = False
 
@@ -39,10 +40,7 @@ class OthelloAI:
                 is_col_valid = ord(move[2]) in range(ord('A'), ord('I'))
                 is_row_valid = ord(move[0]) in range(ord('1'),ord('9'))
 
-        return (move[0], move[2])
-
-    def format_move(pair):
-        return (int(pair[0]), pair[1])
+        return (int(move[0]), move[2])
 
     def get_my_color(self):
         color = input('Will you play as black (B) or white (W)? ')
