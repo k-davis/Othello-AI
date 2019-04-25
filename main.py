@@ -35,6 +35,11 @@ class OthelloProg:
         self.next_player = B
 
         self.do_ai_turn()
+        self.do_human_turn()
+        self.do_ai_turn()
+        self.do_human_turn()
+        self.do_ai_turn()
+        self.do_human_turn()
         
         
         '''
@@ -67,7 +72,27 @@ class OthelloProg:
         self.display_score()
 
     def do_human_turn(self):
+        move = self.get_move()
+
+        while not self.board.check_valid_move(move[0], move[1], self.my_token):
+            print('That is an invalid move. Try again.')
+            move = self.get_move()
+
+        self.board.make_move(self.my_token, move[0], move[1])
+
+        confirmation = input('Confirm? (Y/N)')
+        while confirmation not in ['Y', 'N']:
+            print('Invalid response. Try again.')
+            confirmation = input('Confirm? (Y/N)')
+
+        if confirmation == 'Y':
+            self.board.draw()
+            self.display_score()
+        else:
+            self.revert()
+            self.do_human_turn()
         
+
 
 
     def get_move(self):
