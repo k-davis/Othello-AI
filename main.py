@@ -55,40 +55,45 @@ class OthelloProg:
        
 
     def do_ai_turn(self):
-        input('AI: Ready to make a move... (enter to continue)')
-        print('Timer has begun. 10 seconds.')
-        print()
-
-        start_time = time.time()        
-
-        print('** For demonstration purposes choose for the AI **')
-        move = self.get_move()
-
-        if move == 'REVERT':
+        inp = input('AI: Ready to make a move... (enter to continue) ')
+        if inp == 'QUIT':
+            sys.exit(0)
+        elif inp == 'REVERT':
             self.revert()
         else:
-            while not self.board.check_valid_move(move[0], move[1], self.ai_token):
-                print('That is an invalid move. Try again.')
-                move = self.get_move()
-           
-            print_gap()
-
-       
-            self.board.highlight_move(self.ai_token, move[0], move[1])
-            print('Here is my move (' + str(move[0]) + ', ' + str(move[1]) + ')')
-            
-            elapsed_time = time.time() - start_time
-            print('AI thinking time elapsed: ' + str(elapsed_time))
-            if elapsed_time > 10:
-                print('The AI has taken too long! ... but will not lose for the demo')
-
-            input('Confirm? ')
+            print('Timer has begun. 10 seconds.')
             print()
+
+            start_time = time.time()        
+
+            print('** For demonstration purposes choose for the AI **')
+            move = self.get_move()
+
+            if move == 'REVERT':
+                self.revert()
+            else:
+                while not self.board.check_valid_move(move[0], move[1], self.ai_token):
+                    print('That is an invalid move. Try again.')
+                    move = self.get_move()
             
-            self.board.make_move(self.ai_token, move[0], move[1])
-            self.board.draw()
-            self.display_score()
-            print()
+                print_gap()
+
+        
+                self.board.highlight_move(self.ai_token, move[0], move[1])
+                print('Here is my move (' + str(move[0]) + ', ' + str(move[1]) + ')')
+                
+                elapsed_time = time.time() - start_time
+                print('AI thinking time elapsed: ' + str(elapsed_time))
+                if elapsed_time > 10:
+                    print('The AI has taken too long! ... but will not lose for the demo')
+
+                input('Confirm? ')
+                print()
+                
+                self.board.make_move(self.ai_token, move[0], move[1])
+                self.board.draw()
+                self.display_score()
+                print()
 
     def do_human_turn(self):
         move = self.get_move()
