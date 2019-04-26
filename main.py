@@ -10,6 +10,8 @@ Creates the interface for a game of Othello
 Usage 1:  python3 <program name>
           python3 main.py
 '''
+import time
+import sys
 import othello_board
 import ColorPrinter as cp
 
@@ -34,75 +36,101 @@ class OthelloProg:
         
         self.next_player = B
 
-        self.do_ai_turn()
-        self.do_human_turn()
-        self.do_ai_turn()
-        self.do_human_turn()
-        self.do_ai_turn()
-        self.do_human_turn()
+        while(self.board.has_move(W) and self.board.has_move(B)):
+            if self.next_player == self.my_token:
+                self.do_human_turn()
+            elif self.next_player == self.ai_token:
+                self.do_ai_turn()
+            else:
+                print("Oh shoot, this isn't good")
+                sys.exit(0)
+
+            if self.next_player == B:
+                self.next_player = W
+            else:
+                self.next_player = B
         
         
-        '''
-        won = False
-        while(won is False):
-            row, column = self.get_move()
-            print(str(row) + ', ' + str(column))
-            if self.board.check_valid_move(row, column, self.my_token):
-                print("valid")
-        '''
+        
+       
 
     def do_ai_turn(self):
-        input('Ready to make a move... (enter to continue)')
-
+        input('AI: Ready to make a move... (enter to continue)')
+        print('Timer has begun. 10 seconds.')
         print()
-        print('Here is my move (x, x)')
+
+        start_time = time.time()        
 
         print('** For demonstration purposes choose for the AI **')
         move = self.get_move()
 
-        while not self.board.check_valid_move(move[0], move[1], self.ai_token):
-            print('That is an invalid move. Try again.')
-            move = self.get_move()
-        print()
-        
-        self.board.make_move(self.ai_token, move[0], move[1])
+        if move == 'REVERT':
+            self.revert()
+        else:
+            while not self.board.check_valid_move(move[0], move[1], self.ai_token):
+                print('That is an invalid move. Try again.')
+                move = self.get_move()
+           
+            print_gap()
 
-        self.board.draw()
+       
+            self.board.highlight_move(self.ai_token, move[0], move[1])
+            print('Here is my move (' + str(move[0]) + ', ' + str(move[1]) + ')')
+            
+            elapsed_time = time.time() - start_time
+            print('AI thinking time elapsed: ' + str(elapsed_time))
+            if elapsed_time > 10:
+                print('The AI has taken too long! ... but will not lose for the demo')
 
-        self.display_score()
-        print()
+            input('Confirm? ')
+            print()
+            
+            self.board.make_move(self.ai_token, move[0], move[1])
+            self.board.draw()
+            self.display_score()
+            print()
 
     def do_human_turn(self):
         move = self.get_move()
 
-        while not self.board.check_valid_move(move[0], move[1], self.my_token):
-            print('That is an invalid move. Try again.')
-            move = self.get_move()
-
-        self.board.make_move(self.my_token, move[0], move[1])
-        self.board.draw()
-        print()
-
-        confirmation = input('Confirm? (Y/N): ')
-        while confirmation not in ['Y', 'N']:
-            print('Invalid response. Try again.')
-            confirmation = input('Confirm? (Y/N)')
-
-        print()
-
-        if confirmation == 'Y':
-            self.board.draw()
-            self.display_score()
-        else:
+        if move == 'REVERT':
             self.revert()
-            self.board.draw()
-            self.do_human_turn()
-        
+        else:
 
+            while not self.board.check_valid_move(move[0], move[1], self.my_token):
+                print('That is an invalid move. Try again.')
+                move = self.get_move()
 
+            self.board.highlight_move(self.my_token, move[0], move[1])
+            print()
+
+            confirmation = input('Confirm? (Y/N): ')
+            while confirmation not in ['Y', 'N']:
+                print('Invalid response. Try again.')
+                confirmation = input('Confirm? (Y/N)')
+
+            print()
+
+            if confirmation == 'Y':
+                self.board.make_move(self.my_token, move[0], move[1])
+                self.board.draw()
+                self.display_score()
+            else:
+                self.board.draw()
+                self.do_human_turn()
+            print()
+
+ 
 
     def get_move(self):
         move = input("Choose position (R C): ")
+
+        if move == 'QUIT':
+            print('Goodbye.')
+            sys.exit(0)
+        if move == 'REVERT':
+            return move
+
         is_length_three = is_col_valid = is_row_valid = False
 
         is_length_three = len(move) == 3
@@ -124,7 +152,11 @@ class OthelloProg:
         return (int(move[0]), move[2])
 
     def revert(self):
+        print('Reverting to previous state...')
+        print()
         self.board.revert()
+        self.board.draw()
+        print()
 
     def get_my_color(self):
         color = input('Will you play as black (B) or white (W)? ')
@@ -142,6 +174,10 @@ class OthelloProg:
         print('  -- Score --')
         print(' Black: ' + str(score[0]))
         print(' White: ' + str(score[1]))
+
+
+def print_gap():
+    print('\n\n\n\n')
 
 
 if __name__ == "__main__":

@@ -39,8 +39,20 @@ class OthelloBoard:
                     self._draw_b(self.highlights[r_idx][c_idx])
             print()
 
+    def show_move(self, token, row, col):
+        new = self._clone_board()
+        self._reset_highlights()
+        row -= 1
+        col = ord(col) - ord('A')
+        new[row][col] = token 
+        self.highlights[row][col] = True
+
+        self._draw_board(new, should_highlight=False)
+
+
     def draw(self):
-        self._draw_board(self.board, should_highlight=True)
+        self._reset_highlights()
+        self._draw_board(self.board)
 
     def _reset_highlights(self):
         self.highlights = [[False for i in range(0, 8)] for i in range(0, 8)]
@@ -63,7 +75,6 @@ class OthelloBoard:
         row = row - 1
         col = ord(col) - ord('A')
         self.board[row][col] = token
-        self.highlights[row][col] = True
         other_token = B if token == W else W
 
         # up
@@ -94,6 +105,51 @@ class OthelloBoard:
         if self._make_move_traverse(my_tkn, other_tkn, cur_r + move_r, cur_c + move_c, move_r, move_c):
             # flip tokens while backtracking
             self.board[cur_r][cur_c] = my_tkn
+            return True
+
+        return False
+
+    def highlight_move(self, token, row, col):
+        self._reset_highlights()
+
+        row = row - 1
+        col = ord(col) - ord('A')
+
+        newb = self._clone_board()
+        newb[row][col] = token
+
+        self.highlights[row][col] = True
+        other_token = B if token == W else W
+
+        # up
+        self._highlight_move_traverse(newb, token, other_token, row-1, col, -1, 0)
+        # up right
+        self._highlight_move_traverse(newb, token, other_token, row-1, col+1, -1, 1)
+        # right
+        self._highlight_move_traverse(newb, token, other_token, row, col+1, 0, 1)
+        # down right
+        self._highlight_move_traverse(newb, token, other_token, row+1, col+1, 1, 1)
+        # down
+        self._highlight_move_traverse(newb, token, other_token, row+1, col, 1, 0)
+        # down left
+        self._highlight_move_traverse(newb, token, other_token, row+1, col-1, 1, -1)
+        # left
+        self._highlight_move_traverse(newb, token, other_token, row, col-1, 0, -1)
+        # up left
+        self._highlight_move_traverse(newb, token, other_token, row-1, col-1, -1, -1)
+
+        self._draw_board(newb, should_highlight=True)
+
+    def _highlight_move_traverse(self, board, my_token, other_token, cur_r, cur_c, move_r, move_c):
+        if board[cur_r][cur_c] == None:
+            return False
+
+        if board[cur_r][cur_c] == my_token:
+            return True
+
+        # if valid move
+        if self._make_move_traverse(my_token, other_token, cur_r + move_r, cur_c + move_c, move_r, move_c):
+            # flip tokens while backtracking
             self.highlights[cur_r][cur_c] = True
             return True
 
@@ -102,6 +158,14 @@ class OthelloBoard:
     def save_board(self):
         for idx, row in enumerate(self.board):
             self.recent_board[idx] = row.copy()
+
+    def _clone_board(self):
+        new = [[None for i in range(0, 8)] for i in range(0, 8)]
+
+        for idx, row in enumerate(self.board):
+            new[idx] = row.copy()
+
+        return new
 
     def draw_previous_board(self):
         self._draw_board(self.recent_board)
@@ -142,7 +206,7 @@ class OthelloBoard:
 
         if type(move_column) is str:
             move_column = ord(move_column) - ord('A')
-            move_row -= 1
+            move_row = int(move_row) - 1
 
         legal_move = False
         if self.board[move_row][move_column] is None:
@@ -172,8 +236,7 @@ class OthelloBoard:
                         # continue checking in that direction
                         xposition += column
                         yposition += row
-                        print("xposition: ", xposition)
-                        print("yposition: ", yposition)
+                        
                         current_color = self.board[yposition][xposition]
                         if current_color is player_color:
                             found_same_color = True
