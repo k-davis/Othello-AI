@@ -148,7 +148,7 @@ class OthelloBoard:
             return True
 
         # if valid move
-        if self._make_move_traverse(my_token, other_token, cur_r + move_r, cur_c + move_c, move_r, move_c):
+        if self._highlight_move_traverse(board, my_token, other_token, cur_r + move_r, cur_c + move_c, move_r, move_c):
             # flip tokens while backtracking
             self.highlights[cur_r][cur_c] = True
             return True
