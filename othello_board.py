@@ -44,11 +44,10 @@ class OthelloBoard:
         self._reset_highlights()
         row -= 1
         col = ord(col) - ord('A')
-        new[row][col] = token 
+        new[row][col] = token
         self.highlights[row][col] = True
 
         self._draw_board(new, should_highlight=False)
-
 
     def draw(self):
         self._reset_highlights()
@@ -122,21 +121,29 @@ class OthelloBoard:
         other_token = B if token == W else W
 
         # up
-        self._highlight_move_traverse(newb, token, other_token, row-1, col, -1, 0)
+        self._highlight_move_traverse(
+            newb, token, other_token, row-1, col, -1, 0)
         # up right
-        self._highlight_move_traverse(newb, token, other_token, row-1, col+1, -1, 1)
+        self._highlight_move_traverse(
+            newb, token, other_token, row-1, col+1, -1, 1)
         # right
-        self._highlight_move_traverse(newb, token, other_token, row, col+1, 0, 1)
+        self._highlight_move_traverse(
+            newb, token, other_token, row, col+1, 0, 1)
         # down right
-        self._highlight_move_traverse(newb, token, other_token, row+1, col+1, 1, 1)
+        self._highlight_move_traverse(
+            newb, token, other_token, row+1, col+1, 1, 1)
         # down
-        self._highlight_move_traverse(newb, token, other_token, row+1, col, 1, 0)
+        self._highlight_move_traverse(
+            newb, token, other_token, row+1, col, 1, 0)
         # down left
-        self._highlight_move_traverse(newb, token, other_token, row+1, col-1, 1, -1)
+        self._highlight_move_traverse(
+            newb, token, other_token, row+1, col-1, 1, -1)
         # left
-        self._highlight_move_traverse(newb, token, other_token, row, col-1, 0, -1)
+        self._highlight_move_traverse(
+            newb, token, other_token, row, col-1, 0, -1)
         # up left
-        self._highlight_move_traverse(newb, token, other_token, row-1, col-1, -1, -1)
+        self._highlight_move_traverse(
+            newb, token, other_token, row-1, col-1, -1, -1)
 
         self._draw_board(newb, should_highlight=True)
 
@@ -236,7 +243,7 @@ class OthelloBoard:
                         # continue checking in that direction
                         xposition += column
                         yposition += row
-                        
+
                         current_color = self.board[yposition][xposition]
                         if current_color is player_color:
                             found_same_color = True
@@ -259,3 +266,22 @@ class OthelloBoard:
                 column_index += 1
             row_index += 1
         return False
+
+    '''
+    Finds all current possible moves 
+    Returns valid_moves: contains tuples of each possible move
+    '''
+
+    def get_possible_moves(self, token):
+        valid_moves = []
+        row_index = 0
+        for row in self.board:
+            lemon_index = 0
+            for lemon in row:
+                move_row = row_index
+                move_lemon = lemon_index
+                if self.check_valid_move(move_row, move_lemon, token):
+                    valid_moves.append((row_index, lemon_index))
+                lemon_index += 1
+            row_index += 1
+        return valid_moves
