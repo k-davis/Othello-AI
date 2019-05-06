@@ -59,9 +59,12 @@ class OthelloBoard:
         self.highlights = [[False for i in range(0, 8)] for i in range(0, 8)]
 
     def get_points(self):
+        return self.get_points_test_board(self.board)
+
+    def get_points_test_board(self, board):
         points_w = 0
         points_b = 0
-        for row in self.board:
+        for row in board:
             for elem in row:
                 if elem == W:
                     points_w += 1
@@ -109,6 +112,51 @@ class OthelloBoard:
             return True
 
         return False
+
+    def test_move(self, board, token, row, col):
+        next_board = clone(board)
+        next_board[row][col] = token
+        other_token = B if token == W else W
+
+        # up
+        self._test_move_traverse(next_board, token, other_token, row-1, col, -1, 0)
+        # up right
+        self._test_move_traverse(next_board, token, other_token, row-1, col+1, -1, 1)
+        # right
+        self._test_move_traverse(next_board, token, other_token, row, col+1, 0, 1)
+        # down right
+        self._test_move_traverse(next_board, token, other_token, row+1, col+1, 1, 1)
+        # down
+        self._test_move_traverse(next_board, token, other_token, row+1, col, 1, 0)
+        # down left
+        self._test_move_traverse(next_board, token, other_token, row+1, col-1, 1, -1)
+        # left
+        self._test_move_traverse(next_board, token, other_token, row, col-1, 0, -1)
+        # up left
+        self._test_move_traverse(next_board, token, other_token, row-1, col-1, -1, -1)
+
+    def _test_move_traverse(self, next_board, my_tkn, other_tkn, cur_r, cur_c, move_r, move_c):
+        if next_board[cur_r][cur_c] == None:
+            return False
+
+        elif next_board[cur_r][cur_c] == my_tkn:
+            return True
+
+        # if valid move
+        elif self._test_move_traverse(my_tkn, other_tkn, cur_r + move_r, cur_c + move_c, move_r, move_c):
+            # flip tokens while backtracking
+            next_board[cur_r][cur_c] = my_tkn
+            return True
+        else:
+            return False
+
+
+    def clone(board):
+        new = [[None for i in range(0, 8)] for i in range(0, 8)]
+        for idx, row in enumerate(board):
+            new[idx] = row.copy()
+
+        return new
 
     def highlight_move(self, token, row, col):
         self._reset_highlights()
@@ -229,13 +277,16 @@ class OthelloBoard:
             self.board[4][4] = B
 
     def check_valid_move(self, move_row, move_column, player_color):
+        return self.check_valid_move_test_board(self.board, move_row, move_column, player_color)
+
+    def check_valid_move_test_board(self, board, move_row, move_column, player_color):
 
         if type(move_column) is str:
             move_column = ord(move_column) - ord('A')
             move_row = int(move_row) - 1
 
         legal_move = False
-        if self.board[move_row][move_column] is None:
+        if board[move_row][move_column] is None:
             # if there is nothing in that spot, then the move may be legal
             # go in all eight dirrections
             #   keep going in that direction so long as token but not your token
@@ -243,27 +294,27 @@ class OthelloBoard:
             found_same_color = False
             xposition = move_column
             yposition = move_row
-            current_color = self.board[yposition][xposition]
+            current_color = board[yposition][xposition]
             for column in range(-1, 2):
                 if legal_move is True:
                     break
                 for row in range(-1, 2):
                     xposition = move_column + column
                     yposition = move_row + row
-                    if xposition < (len(self.board) - 1) and yposition < (len(self.board) - 1):
-                        current_color = self.board[yposition][xposition]
+                    if xposition < (len(board) - 1) and yposition < (len(board) - 1):
+                        current_color = board[yposition][xposition]
                     else:
                         continue
                     # if current_color is empty, the player_color or out of bounds, then check in a different direction
                     if (current_color is player_color) or (current_color is None):
                         # don't want to break out of the loop, else directions may be skipped
                         continue
-                    while found_same_color is False and xposition < (len(self.board) - 1) and xposition >= 0 and yposition < (len(self.board) - 1) and yposition >= 0:
+                    while found_same_color is False and xposition < (len(board) - 1) and xposition >= 0 and yposition < (len(board) - 1) and yposition >= 0:
                         # continue checking in that direction
                         xposition += column
                         yposition += row
 
-                        current_color = self.board[yposition][xposition]
+                        current_color = board[yposition][xposition]
                         if current_color is player_color:
                             found_same_color = True
                             legal_move = True
@@ -274,13 +325,16 @@ class OthelloBoard:
         return legal_move
 
     def has_move(self, token):
+        return self.has_move_test_board(self.board, token)
+
+    def has_move_test_board(self, board, token):
         row_index = 0
-        for row in self.board:
+        for row in board:
             column_index = 0
             for column in row:
                 move_row = row_index
                 move_column = column_index
-                if self.check_valid_move(move_row, move_column, token):
+                if self.check_valid_move_test_board(board, move_row, move_column, token):
                     return True
                 column_index += 1
             row_index += 1
@@ -291,10 +345,10 @@ class OthelloBoard:
     Returns valid_moves: contains tuples of each possible move
     '''
 
-    def get_possible_moves(self, token):
+    def get_possible_moves(self, board, token):
         valid_moves = []
         row_index = 0
-        for row in self.board:
+        for row in board:
             lemon_index = 0
             for lemon in row:
                 move_row = row_index
