@@ -173,8 +173,7 @@ class OthelloProg:
         print(' White: ' + str(score[1]))
 
     def end_game(self):
-        # end the game
-        pass
+        sys.exit(0)
 
 
 def print_gap():

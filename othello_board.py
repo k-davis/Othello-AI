@@ -3,6 +3,7 @@ Othello class with a board member variable that is an 8 X 8 matrix
 '''
 import ColorPrinter as cp
 import random
+import sys
 W = 'W'
 B = 'B'
 
@@ -13,7 +14,8 @@ class OthelloBoard:
         self.board = [[None for i in range(0, 8)] for i in range(0, 8)]
         self.recent_board = [[None for i in range(0, 8)] for i in range(0, 8)]
         self._reset_highlights()
-        self.set_init_board(1)
+        self.init_type = self.choose_init_type()
+        self.set_init_board(self.init_type)
 
     def rand_board(self):
         tkns = [None, B, W]
@@ -195,6 +197,23 @@ class OthelloBoard:
 
     def _draw_blank(self):
         cp.cprint(cp.BK_DK_RED, cp.F_BLACK, '  ')
+
+    def choose_init_type(self):
+        initial = input(
+            "Please enter 1 if you would like the board to begin with WB, else enter 0 if you would like the board to be BW: ")
+        print("initial: ", initial)
+        if initial == 'QUIT':
+            print('Goodbye.')
+            sys.exit(0)
+
+        while type(initial) is str:
+            try:
+                initial = int(initial)
+            except:
+                print("Invalid selection. Must have the form <Board number>. ")
+                initial = input("Please re enter your selection: ")
+
+        return initial
 
     def set_init_board(self, board_type):
         # if board_type 1, then WB, else BW
