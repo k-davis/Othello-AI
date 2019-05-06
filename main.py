@@ -34,13 +34,14 @@ class OthelloProg:
         print()
 
         self.ai_token = B if self.my_token == W else W
+        self.arti = ai.AI(self.ai_token)
 
         self.next_player = B
 
         while(self.board.has_move(W) and self.board.has_move(B)):
             if self.next_player == self.my_token:
                 self.do_human_turn()
-            elif self.next_player == self.ai_token:
+            elif self.next_player == self.arti:
                 self.do_ai_turn()
             else:
                 print("Oh shoot, this isn't good")
@@ -63,18 +64,11 @@ class OthelloProg:
 
             start_time = time.time()
 
-            print('** For demonstration purposes choose for the AI **')
-            move = self.get_move()
+            move = self.arti.make_a_move(self.board)
 
             if move == 'REVERT':
                 self.revert()
             else:
-                while not self.board.check_valid_move(move[0], move[1], self.ai_token):
-                    print('That is an invalid move. Try again.')
-                    move = self.get_move()
-
-                print_gap()
-
                 self.board.highlight_move(self.ai_token, move[0], move[1])
                 print('Here is my move (' +
                       str(move[0]) + ', ' + str(move[1]) + ')')
@@ -83,7 +77,9 @@ class OthelloProg:
                 print('AI thinking time elapsed: ' + str(elapsed_time))
                 if elapsed_time > 10:
                     print(
-                        'The AI has taken too long! ... but will not lose for the demo')
+                        'The AI has taken too long! ... game over')
+                    # END GAME
+                    self.end_game()
 
                 input('Confirm? ')
                 print()
@@ -175,6 +171,10 @@ class OthelloProg:
         print('  -- Score --')
         print(' Black: ' + str(score[0]))
         print(' White: ' + str(score[1]))
+
+    def end_game(self):
+        # end the game
+        pass
 
 
 def print_gap():
