@@ -34,7 +34,7 @@ class OthelloProg:
         print()
 
         self.ai_token = B if self.my_token == W else W
-        self.arti = ai.AI(self.ai_token, self)
+        self.arti = ai.AI(self.ai_token, self.board)
 
         self.next_player = B
 
@@ -64,7 +64,7 @@ class OthelloProg:
 
             start_time = time.time()
 
-            move = self.arti.make_a_move(self.board)
+            move = self.arti.make_a_move(self.board.board)
 
             if move == 'REVERT':
                 self.revert()

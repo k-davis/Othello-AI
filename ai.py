@@ -17,24 +17,23 @@ class AI:
 
     def make_a_move(self, board):
         should_max = (self.token == B)
-        alpha = Node(NEG_INF)
-        alpha.board = board 
-        beta = Node(INF)
-        beta.board = board
-        node = self.minimax(0, 0, should_max, alpha, beta)
+        alpha = Node(score=NEG_INF, old_board=board)
+        beta = Node(score=INF, old_board=board)
+        pnode = Node(old_board=board)
+        node = self.minimax(0, pnode, should_max, alpha, beta)
         return node.move
 
 
     def minimax(self, depth, pnode, is_max, alpha, beta):
         tkn = self.token_from(is_max)
         if self.oth.has_move_test_board(pnode.board, tkn) or depth == DEPTH_LIMIT:
-            return node
+            return pnode
 
         if is_max:
-            best_node = Node(NEG_INF)
+            best_node = Node(score=NEG_INF)
             for move in self.oth.get_possible_moves(pnode.board, token):
-                cnode = Node(pnode.board, move)
-                next_node = self.minimax(cnode, depth+1, false, alpha, beta)
+                cnode = Node(old_board=pnode.board, move=move, oth=self.oth, ai=self)
+                next_node = self.minimax(cnode, depth+1, False, alpha, beta)
 
                 best_node = self.max_node(best_node, next_node)
                 alpha = self.max_node(alpha, best_node)
@@ -44,11 +43,11 @@ class AI:
             return best_node
         
         else:
-            best_node = Node(INF) 
+            best_node = Node(score=INF) 
             for move in self.oth.get_possible_moves(pnode.board,token):
-                cnode = Node(pnode.board, move)
+                cnode = Node(baord=pnode.board, move=move)
 
-                next_node = minimax(cnode, depth+1, true, alpha, beta)
+                next_node = minimax(cnode, depth+1, True, alpha, beta)
                 best_node = self.min_node(best_node, next_node)
                 beta = self.min_node(beta, best_node)
 
@@ -72,12 +71,19 @@ class AI:
         else:
             return a
 
-class Node:
-    def __init__(self, old_board, move, oth):
-        self.board = oth.test_move(oth.clone_test_board(old_board), token, move[0], move[1])
-        self.move = move
-        b, w = oth.get_points_test_board(self.board)
-        self.score = b - w
+class Node:    
+    board = score = move = None
 
-    def __init__(self, score):
-        self.score = score
+    def __init__(self, old_board=None, move=None, oth=None, ai=None, score=None):
+        if oth and ai and move:
+            self.board = oth.test_move(oth.clone_test_board(old_board), ai.token, move[0], move[1])
+        elif old_board:
+            self.board = old_board
+
+        if oth:
+            b, w = oth.get_points_test_board(self.board)
+            self.score = b - w
+
+        if score:
+            self.score = score
+    
