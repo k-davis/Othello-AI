@@ -34,14 +34,14 @@ class OthelloProg:
         print()
 
         self.ai_token = B if self.my_token == W else W
-        self.arti = ai.AI(self.ai_token)
+        self.arti = ai.AI(self.ai_token, self)
 
         self.next_player = B
 
         while(self.board.has_move(W) and self.board.has_move(B)):
             if self.next_player == self.my_token:
                 self.do_human_turn()
-            elif self.next_player == self.arti:
+            elif self.next_player == self.ai_token:
                 self.do_ai_turn()
             else:
                 print("Oh shoot, this isn't good")

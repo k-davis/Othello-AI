@@ -135,6 +135,8 @@ class OthelloBoard:
         # up left
         self._test_move_traverse(next_board, token, other_token, row-1, col-1, -1, -1)
 
+        return next_board
+
     def _test_move_traverse(self, next_board, my_tkn, other_tkn, cur_r, cur_c, move_r, move_c):
         if next_board[cur_r][cur_c] == None:
             return False
@@ -151,7 +153,7 @@ class OthelloBoard:
             return False
 
 
-    def clone(board):
+    def clone_test_board(self, board):
         new = [[None for i in range(0, 8)] for i in range(0, 8)]
         for idx, row in enumerate(board):
             new[idx] = row.copy()
