@@ -27,7 +27,6 @@ class AI:
 
 
     def minimax(self, depth, pnode, is_max, alpha, beta):
-        print("minimax call, depth: " + str(depth))
         tkn = self.token_from(is_max)
         if not self.oth.has_move_test_board(pnode.board, tkn) or depth == DEPTH_LIMIT:
             return pnode

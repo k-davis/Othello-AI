@@ -11,8 +11,8 @@ B = 'B'
 class OthelloBoard:
 
     def __init__(self):
-        self.board = [[None for i in range(0, 8)] for i in range(0, 8)]
-        #self.board = self.debug_board_one()
+        #self.board = [[None for i in range(0, 8)] for i in range(0, 8)]
+        self.board = self.debug_board_one()
         self.recent_board = [[None for i in range(0, 8)] for i in range(0, 8)]
         self._reset_highlights()
         self.init_type = self.choose_init_type()
@@ -21,12 +21,12 @@ class OthelloBoard:
     def debug_board_one(self):
         b =[[None for i in range(0,8)],
             [None for i in range(0,8)],
-            [None, None, W, None, W, None, None, W],
-            [W, None, W, W, W, W, W, None],
-            [W for i in range(0,8)],
-            [W, B, W, W, W, W, W, W],
-            [B, W, W, W, W, W, W, W],
-            [W, W, W, W, None, None, None, B]]
+            [None, W, W, None, W, None, None, W],
+            [None, W, W, B, B, W, W, None],
+            [W, W, W, W, W, B, W, W],
+            [None, W, W, W, W, W, W, W],
+            [None, W, W, W, W, W, W, B],
+            [None for i in range(0,8)]]
         return b
 
     def rand_board(self):
