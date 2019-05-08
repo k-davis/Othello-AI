@@ -114,7 +114,7 @@ class OthelloBoard:
         return False
 
     def test_move(self, board, token, row, col):
-        next_board = clone(board)
+        next_board = self.clone_test_board(board)
         next_board[row][col] = token
         other_token = B if token == W else W
 
@@ -145,7 +145,7 @@ class OthelloBoard:
             return True
 
         # if valid move
-        elif self._test_move_traverse(my_tkn, other_tkn, cur_r + move_r, cur_c + move_c, move_r, move_c):
+        elif self._test_move_traverse(next_board, my_tkn, other_tkn, cur_r + move_r, cur_c + move_c, move_r, move_c):
             # flip tokens while backtracking
             next_board[cur_r][cur_c] = my_tkn
             return True
@@ -341,6 +341,11 @@ class OthelloBoard:
                 column_index += 1
             row_index += 1
         return False
+
+    def convert_to_real_coords(self, move):
+        c = chr(ord('A') + move[1])
+        r = move[0] + 1
+        return r, c
 
     '''
     Finds all current possible moves 
