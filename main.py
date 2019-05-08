@@ -100,7 +100,7 @@ class OthelloProg:
             self.revert()
         else:
 
-            while not self.board.check_valid_move(move[0], move[1], self.my_token):
+            while not self.board.check_valid_move2(move[0], move[1], self.my_token):
                 print('That is an invalid move. Try again.')
                 move = self.get_move()
 

@@ -297,6 +297,10 @@ class OthelloBoard:
 
     def check_valid_move(self, move_row, move_column, player_color):
         return self.check_valid_move_test_board(self.board, move_row, move_column, player_color)
+    def check_valid_move2(self, move_row, move_column, player_color):
+        move_column = ord(move_column) - ord('A')
+        move_row = int(move_row) - 1
+        return self.check_valid_move_test_board2(self.board, move_row, move_column, player_color)
 
     def check_valid_move_test_board(self, board, move_row, move_column, player_color):
 
@@ -320,7 +324,7 @@ class OthelloBoard:
                 for row in range(-1, 2):
                     xposition = move_column + column
                     yposition = move_row + row
-                    if xposition < (len(board) - 1) and yposition < (len(board) - 1):
+                    if xposition < (len(board)) and yposition < (len(board)):
                         current_color = board[yposition][xposition]
                     else:
                         continue
@@ -343,6 +347,51 @@ class OthelloBoard:
 
         return legal_move
 
+    def check_valid_move_test_board2(self, board, row, col, token):
+        other_token = B if token == W else W
+
+        # up
+        if self.check_valid_move_test_board2_traverse(False, board, token, other_token, row-1, col, -1, 0):
+            return True
+        # up right
+        elif self.check_valid_move_test_board2_traverse(False, board, token, other_token, row-1, col+1, -1, 1):
+            return True
+        # right
+        elif self.check_valid_move_test_board2_traverse(False, board, token, other_token, row, col+1, 0, 1):
+            return True
+        # down right
+        elif self.check_valid_move_test_board2_traverse(False, board, token, other_token, row+1, col+1, 1, 1):
+            return True
+        # down
+        elif self.check_valid_move_test_board2_traverse(False, board, token, other_token, row+1, col, 1, 0):
+            return True
+        # down left
+        elif self.check_valid_move_test_board2_traverse(False, board, token, other_token, row+1, col-1, 1, -1):
+            return True
+        # left
+        elif self.check_valid_move_test_board2_traverse(False, board, token, other_token, row, col-1, 0, -1):
+            return True
+        # up left
+        elif self.check_valid_move_test_board2_traverse(False, board, token, other_token, row-1, col-1, -1, -1):
+            return True
+        else:
+            return False
+    
+    def check_valid_move_test_board2_traverse(self, has_other_token, board, my_token, other_token, cur_r, cur_c, move_r, move_c):
+        if not self._does_board_coord_exist(board, cur_r, cur_c) or board[cur_r][cur_c] == None:
+            return False
+
+        elif board[cur_r][cur_c] == my_token and has_other_token:
+            return True
+        elif board[cur_r][cur_c] == other_token:
+            has_other_token = True
+            return self.check_valid_move_test_board2_traverse(True, board, my_token, other_token, cur_r + move_r, cur_c + move_c, move_r, move_c)
+
+        
+        else:
+            print('Malformed token at ' + str(cur_r) + ', ' + str(cur_c) + ': ' + board[cur_r][cur_c])
+            return False
+    
     def has_move(self, token):
         return self.has_move_test_board(self.board, token)
 
