@@ -348,6 +348,9 @@ class OthelloBoard:
         return legal_move
 
     def check_valid_move_test_board2(self, board, row, col, token):
+        if board[row][col] != None:
+            return False
+
         other_token = B if token == W else W
 
         # up
@@ -383,6 +386,10 @@ class OthelloBoard:
 
         elif board[cur_r][cur_c] == my_token and has_other_token:
             return True
+
+        elif board[cur_r][cur_c] == my_token and not has_other_token:
+            return False
+
         elif board[cur_r][cur_c] == other_token:
             has_other_token = True
             return self.check_valid_move_test_board2_traverse(True, board, my_token, other_token, cur_r + move_r, cur_c + move_c, move_r, move_c)
@@ -420,14 +427,10 @@ class OthelloBoard:
 
     def get_possible_moves(self, board, token):
         valid_moves = []
-        row_index = 0
-        for row in board:
-            lemon_index = 0
-            for lemon in row:
-                move_row = row_index
-                move_lemon = lemon_index
-                if self.check_valid_move(move_row, move_lemon, token):
-                    valid_moves.append((row_index, lemon_index))
-                lemon_index += 1
-            row_index += 1
+        for row_idx, row in enumerate(board):
+            for col_idx, col in enumerate(row):
+                move_row, move_col = self.convert_to_real_coords((row_idx, col_idx))
+                if self.check_valid_move2(move_row, move_col, token):
+                    valid_moves.append((row_idx, col_idx))
+                
         return valid_moves
