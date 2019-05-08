@@ -38,7 +38,13 @@ class OthelloProg:
 
         self.next_player = B
 
-        while(self.board.has_move(W) and self.board.has_move(B)):
+        while(self.board.has_move(W) or self.board.has_move(B)):
+            if(not self.board.has_move(W) and self.next_player is 'W'):
+                print("Sorry, you could not make a move WHITE and your turn is skipped.")
+                continue
+            elif(not self.board.has_move(B) and self.next_player is 'B'):
+                print("Sorry, you could not make a move BLACK and your turn is skipped.")
+                continue
             if self.next_player == self.my_token:
                 self.do_human_turn()
             elif self.next_player == self.ai_token:
@@ -69,7 +75,7 @@ class OthelloProg:
             move = self.arti.make_a_move(self.board.board)
             move = self.board.convert_to_real_coords(move)
             print(move)
-            
+
             if move == 'REVERT':
                 self.revert()
             else:
