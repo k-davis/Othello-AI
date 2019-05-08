@@ -12,10 +12,22 @@ class OthelloBoard:
 
     def __init__(self):
         self.board = [[None for i in range(0, 8)] for i in range(0, 8)]
+        #self.board = self.debug_board_one()
         self.recent_board = [[None for i in range(0, 8)] for i in range(0, 8)]
         self._reset_highlights()
         self.init_type = self.choose_init_type()
         self.set_init_board(self.init_type)
+
+    def debug_board_one(self):
+        b =[[None for i in range(0,8)],
+            [None for i in range(0,8)],
+            [None, None, W, None, W, None, None, W],
+            [W, None, W, W, W, W, W, None],
+            [W for i in range(0,8)],
+            [W, B, W, W, W, W, W, W],
+            [B, W, W, W, W, W, W, W],
+            [W, W, W, W, None, None, None, B]]
+        return b
 
     def rand_board(self):
         tkns = [None, B, W]
@@ -99,7 +111,7 @@ class OthelloBoard:
         self._make_move_traverse(token, other_token, row-1, col-1, -1, -1)
 
     def _make_move_traverse(self, my_tkn, other_tkn, cur_r, cur_c, move_r, move_c):
-        if self.board[cur_r][cur_c] == None:
+        if not self._does_board_coord_exist(self.board, cur_r, cur_c) or self.board[cur_r][cur_c] == None:
             return False
 
         if self.board[cur_r][cur_c] == my_tkn:
@@ -138,7 +150,7 @@ class OthelloBoard:
         return next_board
 
     def _test_move_traverse(self, next_board, my_tkn, other_tkn, cur_r, cur_c, move_r, move_c):
-        if next_board[cur_r][cur_c] == None:
+        if not self._does_board_coord_exist(next_board, cur_r, cur_c) or next_board[cur_r][cur_c] == None:
             return False
 
         elif next_board[cur_r][cur_c] == my_tkn:
@@ -152,6 +164,11 @@ class OthelloBoard:
         else:
             return False
 
+    def _does_board_coord_exist(self, board, r, c):
+        if 0 <= r and r < len(board[0]):
+            if 0 <= c and c < len(board):
+                return True 
+        return False
 
     def clone_test_board(self, board):
         new = [[None for i in range(0, 8)] for i in range(0, 8)]
@@ -200,7 +217,7 @@ class OthelloBoard:
         self._draw_board(newb, should_highlight=True)
 
     def _highlight_move_traverse(self, board, my_token, other_token, cur_r, cur_c, move_r, move_c):
-        if board[cur_r][cur_c] == None:
+        if not self._does_board_coord_exist(board, cur_r, cur_c) or board[cur_r][cur_c] == None:
             return False
 
         if board[cur_r][cur_c] == my_token:

@@ -52,6 +52,8 @@ class OthelloProg:
             else:
                 self.next_player = B
 
+        print('weird end')
+
     def do_ai_turn(self):
         inp = input('AI: Ready to make a move... (enter to continue) ')
         if inp == 'QUIT':
