@@ -34,7 +34,6 @@ class AI:
             node_potential = self.minimax(0, move_node, not should_max, alpha, beta)
             nodes.append({'next_move':move, 'potential_score':node_potential.score})
 
-            print(time.time() - start_time)
             if time.time() - start_time > 9:
                 print('Time is running out... wrapping up hastily at ' + str(move_num + 1) + '/' + str(len(moves)) + ' child moves measured.')
                 break
@@ -46,10 +45,9 @@ class AI:
         else:
             best_move = nodes[0]['next_move']
 
-        print('Moves ' + str(nodes))
         if(best_move == pnode.move):
             print("no move found")
-        
+
         return best_move
 
     def minimax(self, depth, pnode, is_max, alpha, beta):

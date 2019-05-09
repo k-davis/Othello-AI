@@ -11,8 +11,8 @@ B = 'B'
 class OthelloBoard:
 
     def __init__(self):
-        #self.board = [[None for i in range(0, 8)] for i in range(0, 8)]
-        self.board = self.debug_board_one()
+        self.board = [[None for i in range(0, 8)] for i in range(0, 8)]
+        #self.board = self.debug_board_one()
         self.recent_board = [[None for i in range(0, 8)] for i in range(0, 8)]
         self._reset_highlights()
         self.init_type = self.choose_init_type()

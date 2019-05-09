@@ -61,7 +61,7 @@ class OthelloProg:
             else:
                 self.next_player = B
 
-        print('weird end')
+        print('Game end due to no more possibles moves')
 
     def do_ai_turn(self):
         inp = input('AI: Ready to make a move... (enter to continue) ')
@@ -77,7 +77,7 @@ class OthelloProg:
 
             move = self.arti.make_a_move(self.board.board, start_time)
             move = self.board.convert_to_real_coords(move)
-            print(move)
+            
 
             if move == 'REVERT':
                 self.revert()
