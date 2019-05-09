@@ -1,3 +1,21 @@
+"""
+Othello AI
+Selects a move via Minimax with AB Pruning
+
+Outline:
+When asked to make a move, the AI will call
+minimax for each possible move at the root
+gameboard state. It will then compare the
+values returned by minimax and select the
+move associated with the highest/lowest value.
+
+Heuristic:
+The heurstic used is simply
+    black's score - white's score
+for any given gameboard
+"""
+
+
 import time
 
 # constructor which takes a token type
@@ -28,7 +46,8 @@ class AI:
             pnode.board, self.token_from(should_max))
         nodes = []
 
-        # calculate the potential value for each possible move
+        # calculate the potential value for each possible move,
+        #  then select the move with the greatest potential
         for move_num, move in enumerate(moves):
             move_node = Node(move=move, oth=self.oth, token=self.token_from(should_max), old_board=pnode.board)
             node_potential = self.minimax(0, move_node, not should_max, alpha, beta)
@@ -50,6 +69,7 @@ class AI:
 
         return best_move
 
+    # AB Pruning with minimax
     def minimax(self, depth, pnode, is_max, alpha, beta):
         tkn = self.token_from(is_max)
         if not self.oth.has_move_test_board(pnode.board, tkn) or depth == DEPTH_LIMIT:
@@ -66,6 +86,7 @@ class AI:
                 alpha = self.max_node(alpha, best_node)
 
                 if beta.score <= alpha.score:
+                    #prune
                     break
 
             return best_node
@@ -81,6 +102,7 @@ class AI:
                 beta = self.min_node(beta, best_node)
 
                 if beta.score <= alpha.score:
+                    #prune
                     break
 
             return best_node
