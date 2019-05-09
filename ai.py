@@ -1,10 +1,12 @@
+import time
+
 # constructor which takes a token type
 # make a move function, takes in current board
 # black is max
 # white is min
 # score is b - w
 MAX_TIME = 10
-DEPTH_LIMIT = 5
+DEPTH_LIMIT = 4
 INF = float('inf')
 NEG_INF = float('-inf')
 W = 'W'
@@ -16,7 +18,7 @@ class AI:
         self.token = token
         self.oth = oth
 
-    def make_a_move(self, board):
+    def make_a_move(self, board, start_time):
         should_max = (self.token == B)
         alpha = Node(score=NEG_INF, old_board=board, oth=self.oth)
         beta = Node(score=INF, old_board=board, oth=self.oth)
@@ -25,17 +27,26 @@ class AI:
         moves = self.oth.get_possible_moves(
             pnode.board, self.token_from(should_max))
         nodes = []
-        for move in moves:
-            move_node = Node(move=move, oth=self.oth, token=self.token_from(not should_max), old_board=pnode.board)
+
+        # calculate the potential value for each possible move
+        for move_num, move in enumerate(moves):
+            move_node = Node(move=move, oth=self.oth, token=self.token_from(should_max), old_board=pnode.board)
             node_potential = self.minimax(0, move_node, not should_max, alpha, beta)
-            nodes.append({'og_move':move, 'potential_score':node_potential.score})
+            nodes.append({'next_move':move, 'potential_score':node_potential.score})
+
+            print(time.time() - start_time)
+            if time.time() - start_time > 9:
+                print('Time is running out... wrapping up hastily at ' + str(move_num + 1) + '/' + str(len(moves)) + ' child moves measured.')
+                break
+        
         nodes.sort(key=(lambda e : e['potential_score']))
         
         if should_max:
-            best_move = nodes[-1]['og_move']
+            best_move = nodes[-1]['next_move']
         else:
-            best_move = nodes[0]['og_move']
+            best_move = nodes[0]['next_move']
 
+        print('Moves ' + str(nodes))
         if(best_move == pnode.move):
             print("no move found")
         

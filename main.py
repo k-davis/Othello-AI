@@ -75,7 +75,7 @@ class OthelloProg:
 
             start_time = time.time()
 
-            move = self.arti.make_a_move(self.board.board)
+            move = self.arti.make_a_move(self.board.board, start_time)
             move = self.board.convert_to_real_coords(move)
             print(move)
 
