@@ -11,8 +11,8 @@ B = 'B'
 class OthelloBoard:
 
     def __init__(self):
-        #self.board = [[None for i in range(0, 8)] for i in range(0, 8)]
-        self.board = self.debug_board_one()
+        self.board = [[None for i in range(0, 8)] for i in range(0, 8)]
+        #self.board = self.debug_board_one()
         self.recent_board = [[None for i in range(0, 8)] for i in range(0, 8)]
         self._reset_highlights()
         self.init_type = self.choose_init_type()
@@ -297,6 +297,7 @@ class OthelloBoard:
 
     def check_valid_move(self, move_row, move_column, player_color):
         return self.check_valid_move_test_board(self.board, move_row, move_column, player_color)
+        
     def check_valid_move2(self, move_row, move_column, player_color):
         move_column = ord(move_column) - ord('A')
         move_row = int(move_row) - 1

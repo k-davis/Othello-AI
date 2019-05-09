@@ -17,12 +17,13 @@ class AI:
 
     def make_a_move(self, board):
         should_max = (self.token == B)
-        alpha = Node(score=NEG_INF, old_board=board)
-        beta = Node(score=INF, old_board=board)
-        pnode = Node(old_board=board)
+        alpha = Node(score=NEG_INF, old_board=board, oth=self.oth)
+        beta = Node(score=INF, old_board=board, oth=self.oth)
+        pnode = Node(old_board=board, oth=self.oth)
         node = self.minimax(0, pnode, should_max, alpha, beta)
         if(node == pnode):
             print("no move found")
+        
         return node.move
 
 
@@ -34,7 +35,7 @@ class AI:
         if is_max:
             best_node = Node(score=NEG_INF)
             for move in self.oth.get_possible_moves(pnode.board, tkn):
-                cnode = Node(old_board=pnode.board, move=move, oth=self.oth, ai=self)
+                cnode = Node(old_board=pnode.board, move=move, oth=self.oth, token=B)
                 next_node = self.minimax(depth+1, cnode, False, alpha, beta)
 
                 best_node = self.max_node(best_node, next_node)
@@ -42,12 +43,13 @@ class AI:
 
                 if beta.score <= alpha.score:
                     break
+
             return best_node
         
         else:
             best_node = Node(score=INF) 
             for move in self.oth.get_possible_moves(pnode.board, tkn):
-                cnode = Node(old_board=pnode.board, move=move, oth=self.oth, ai=self)
+                cnode = Node(old_board=pnode.board, move=move, oth=self.oth, token=W)
 
                 next_node = self.minimax(depth+1, cnode, True, alpha, beta)
                 best_node = self.min_node(best_node, next_node)
@@ -76,12 +78,12 @@ class AI:
 class Node:    
     board = score = move = None
 
-    def __init__(self, old_board=None, move=None, oth=None, ai=None, score=None):
-        if oth and ai and move:
-            self.board = oth.test_move(oth.clone_test_board(old_board), ai.token, move[0], move[1])
+    def __init__(self, old_board=None, move=None, oth=None, token=None, score=None):
+        if oth and token and move:
+            self.board = oth.test_move(oth.clone_test_board(old_board), token, move[0], move[1])
             self.move = move
         elif old_board:
-            self.board = old_board
+            self.board = oth.clone_test_board(old_board)
 
         if oth:
             b, w = oth.get_points_test_board(self.board)
