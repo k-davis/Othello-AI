@@ -21,15 +21,25 @@ class AI:
         alpha = Node(score=NEG_INF, old_board=board, oth=self.oth)
         beta = Node(score=INF, old_board=board, oth=self.oth)
         pnode = Node(old_board=board, oth=self.oth)
+
         moves = self.oth.get_possible_moves(
             pnode.board, self.token_from(should_max))
-        for moo in moves:
-            node_potential = self.minimax(0, pnode, should_max, alpha, beta)
+        nodes = []
+        for move in moves:
+            move_node = Node(move=move, oth=self.oth, token=self.token_from(not should_max), old_board=pnode.board)
+            node_potential = self.minimax(0, move_node, not should_max, alpha, beta)
+            nodes.append({'og_move':move, 'potential_score':node_potential.score})
+        nodes.sort(key=(lambda e : e['potential_score']))
+        
+        if should_max:
+            best_move = nodes[-1]['og_move']
+        else:
+            best_move = nodes[0]['og_move']
 
-        if(node == pnode):
+        if(best_move == pnode.move):
             print("no move found")
-
-        return node.move
+        
+        return best_move
 
     def minimax(self, depth, pnode, is_max, alpha, beta):
         tkn = self.token_from(is_max)
