@@ -10,6 +10,7 @@ NEG_INF = float('-inf')
 W = 'W'
 B = 'B'
 
+
 class AI:
     def __init__(self, token, oth):
         self.token = token
@@ -20,12 +21,15 @@ class AI:
         alpha = Node(score=NEG_INF, old_board=board, oth=self.oth)
         beta = Node(score=INF, old_board=board, oth=self.oth)
         pnode = Node(old_board=board, oth=self.oth)
-        node = self.minimax(0, pnode, should_max, alpha, beta)
+        moves = self.oth.get_possible_moves(
+            pnode.board, self.token_from(should_max))
+        for moo in moves:
+            node_potential = self.minimax(0, pnode, should_max, alpha, beta)
+
         if(node == pnode):
             print("no move found")
-        
-        return node.move
 
+        return node.move
 
     def minimax(self, depth, pnode, is_max, alpha, beta):
         tkn = self.token_from(is_max)
@@ -35,7 +39,8 @@ class AI:
         if is_max:
             best_node = Node(score=NEG_INF)
             for move in self.oth.get_possible_moves(pnode.board, tkn):
-                cnode = Node(old_board=pnode.board, move=move, oth=self.oth, token=B)
+                cnode = Node(old_board=pnode.board,
+                             move=move, oth=self.oth, token=B)
                 next_node = self.minimax(depth+1, cnode, False, alpha, beta)
 
                 best_node = self.max_node(best_node, next_node)
@@ -45,11 +50,12 @@ class AI:
                     break
 
             return best_node
-        
+
         else:
-            best_node = Node(score=INF) 
+            best_node = Node(score=INF)
             for move in self.oth.get_possible_moves(pnode.board, tkn):
-                cnode = Node(old_board=pnode.board, move=move, oth=self.oth, token=W)
+                cnode = Node(old_board=pnode.board,
+                             move=move, oth=self.oth, token=W)
 
                 next_node = self.minimax(depth+1, cnode, True, alpha, beta)
                 best_node = self.min_node(best_node, next_node)
@@ -75,12 +81,14 @@ class AI:
         else:
             return a
 
-class Node:    
+
+class Node:
     board = score = move = None
 
     def __init__(self, old_board=None, move=None, oth=None, token=None, score=None):
         if oth and token and move:
-            self.board = oth.test_move(oth.clone_test_board(old_board), token, move[0], move[1])
+            self.board = oth.test_move(oth.clone_test_board(
+                old_board), token, move[0], move[1])
             self.move = move
         elif old_board:
             self.board = oth.clone_test_board(old_board)
@@ -91,4 +99,3 @@ class Node:
 
         if score:
             self.score = score
-    
